@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:instagramClone.xcodeproj">
+      location = "group:../signupVC.swift">
+   </FileRef>
+   <FileRef
+      location = "group:../../../../../Downloads/Assets.xcassets">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>
