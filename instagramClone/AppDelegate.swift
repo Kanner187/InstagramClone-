@@ -18,13 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         FirebaseApp.configure()          // This incorporates firebase into the application
-        
-        
-        
-        //The code below sets the root view controller as the loginVC created. Added this after I deleted the root view controller created by xcode. 
         window = UIWindow()
         window?.rootViewController = mainVC()
-
         return true
     }
 

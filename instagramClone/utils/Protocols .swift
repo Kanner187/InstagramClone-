@@ -9,5 +9,9 @@
 import Foundation
 
 protocol userProfileHeaderDelegate {
-    func buttonTapped(for header : profileHeader ) 
+    
+    func configureEditFollowButton (for header: profileHeader)
+    func setUserStats (for header : profileHeader)
+    func handleEditButtonTapped (for header : profileHeader)
+    
 }

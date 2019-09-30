@@ -11,6 +11,8 @@ import Firebase
 
 
 class profileHeader: UICollectionViewCell {
+    
+    //MARK:- Properties
     var delegate : userProfileHeaderDelegate?
     
     var user : User?{
@@ -28,8 +30,9 @@ class profileHeader: UICollectionViewCell {
         }
     }
     
-    //MARK : - VIEWS
-    let profileImageView : UIImageView = {
+    
+    //MARK: - Views
+    lazy var profileImageView : UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -37,14 +40,14 @@ class profileHeader: UICollectionViewCell {
         return imageView
     }()
     
-    let nameLabel : UILabel = {
+    lazy var nameLabel : UILabel = {
         let nl = UILabel()
         nl.font = UIFont.boldSystemFont(ofSize: 13)
         nl.contentMode = .center
         return nl
     }()
     
-    let postLabel : UILabel = {
+   lazy var postLabel : UILabel = {
         let pl = UILabel()
         pl.numberOfLines = 0       //Allows multiple lines of text
         //Declare two instances of an attributed text with font and color properties and appends them
@@ -57,53 +60,60 @@ class profileHeader: UICollectionViewCell {
         return pl
     }()
     
-    let followersLabel : UILabel = {
+    lazy var followersLabel : UILabel = {
         let fl = UILabel()
         fl.numberOfLines = 0
         fl.textAlignment = .center
+        //Add tap gesture recognizer
+        let followersTap = UIGestureRecognizer(target: self, action: #selector(handleFollowersTapped))
+        fl.isUserInteractionEnabled = true
+        fl.addGestureRecognizer(followersTap)
         return fl
     }()
     
-    let followingLabel : UILabel = {
+    lazy var followingLabel : UILabel = {
         let fl = UILabel()
         fl.numberOfLines = 0
         fl.textAlignment = .center
+        let tapRecognizer = UIGestureRecognizer(target: self , action: #selector(handleFollowingTapped))
         return fl
     }()
 
-    let gridButton : UIButton = {
+    lazy var gridButton : UIButton = {
         let gridButton = UIButton(type: .system)
         gridButton.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
         gridButton.tintColor = UIColor.lightGray
         return gridButton
     }()
     
-    let listButton : UIButton = {
+    lazy var listButton : UIButton = {
         let listButton = UIButton(type: .system)
         listButton.setImage( #imageLiteral(resourceName: "list"), for: .normal)
         listButton.tintColor = UIColor.lightGray
         return listButton
     }()
     
-    let bookmarkButton : UIButton = {
+   lazy var  bookmarkButton : UIButton = {
         let bookmarkButton = UIButton(type: .system)
         bookmarkButton.setImage(#imageLiteral(resourceName: "ribbon"), for: .normal)
         bookmarkButton.tintColor = UIColor.lightGray
         return bookmarkButton
     }()
     
-    let editProfileFollowButton : UIButton = {
+    lazy var editProfileFollowButton : UIButton = {
         let editButton = UIButton(type: .system)
         editButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         editButton.layer.borderWidth = 0.5
         editButton.layer.borderColor = UIColor.lightGray.cgColor
         editButton.tintColor = UIColor.black
         editButton.layer.cornerRadius = 5
+        editButton.addTarget(self , action: #selector(handleEditButtonTapped), for: .touchUpInside)
         return editButton
     }()
     
 
     
+    //MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -117,8 +127,7 @@ class profileHeader: UICollectionViewCell {
         configureLabels()
         
         self.addSubview(editProfileFollowButton)
-        editProfileFollowButton.anchor(top: postLabel.bottomAnchor, left: profileImageView.rightAnchor, bottom: nil, right: self.rightAnchor, paddingTop: 15, paddingBottom: 0, paddingRight: 10, paddingLeft: 10, width: 0, height: 30)
-        
+        editProfileFollowButton.anchor(top: self.postLabel.bottomAnchor, left: self.profileImageView.rightAnchor, bottom: nil, right: self.rightAnchor, paddingTop: 15, paddingBottom: 0, paddingRight: 10, paddingLeft: 10, width: 0, height: 30)
         configureBottomToolBar()
     }
     
@@ -130,39 +139,20 @@ class profileHeader: UICollectionViewCell {
     
     
     
-    //MARK : - FUNCTIONS
+    
+    //MARK: - Functions
     func configureLabels(){
-        let stack = UIStackView(arrangedSubviews: [postLabel , followersLabel , followingLabel])
+        let stack = UIStackView(arrangedSubviews: [postLabel ,followersLabel ,followingLabel])
         stack.axis = .horizontal
         stack.distribution = .fillEqually
         
-        self.addSubview(stack)
-        stack.anchor(top: self.topAnchor, left: profileImageView.rightAnchor, bottom: nil, right: self.rightAnchor, paddingTop: 18, paddingBottom: 0, paddingRight: 0, paddingLeft: 0, width: 0, height: 40)
+       self.addSubview(stack)
+        stack.anchor(top: self.topAnchor, left: self.profileImageView.rightAnchor, bottom: nil, right: self.rightAnchor, paddingTop: 18, paddingBottom: 0, paddingRight: 0, paddingLeft: 0, width: 0, height: 40)
     }
-    
     
     func configureEditFollowButton (){
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        guard let user = self.user else {return}
-        
-        if uid == user.uid {
-            //configure editFollowButton as edit button
-            self.editProfileFollowButton.setTitle("Edit Profile", for: .normal)
-        }else {
-            user.checkIfUserIsFollowed { (followed) in
-                if followed{
-                    self.editProfileFollowButton.setTitle("Following", for: .normal)
-                }else{
-                    self.editProfileFollowButton.setTitle("Follow", for: .normal)
-                }
-                
-            //configure edit button as follow button
-                self.editProfileFollowButton.backgroundColor = UIColor(displayP3Red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
-                self.editProfileFollowButton.setTitleColor(.white, for: .normal)
-            }
-        }
+        delegate?.configureEditFollowButton(for: self)
     }
-    
     
     //configure a stack view with the grid , list and bookmark buttons
     func configureBottomToolBar (){
@@ -172,7 +162,7 @@ class profileHeader: UICollectionViewCell {
         let bottomDividerView = UIView()
         bottomDividerView.backgroundColor = UIColor.lightGray
         
-        let stack = UIStackView(arrangedSubviews: [gridButton , listButton , bookmarkButton])
+        let stack = UIStackView(arrangedSubviews: [self.gridButton , self.listButton , self.bookmarkButton])
         stack.axis = .horizontal
         stack.distribution = .fillEqually
         stack.spacing = 10
@@ -187,66 +177,23 @@ class profileHeader: UICollectionViewCell {
         bottomDividerView.anchor(top: stack.bottomAnchor, left: self.leftAnchor, bottom: nil, right: self.rightAnchor, paddingTop: 0, paddingBottom: 0, paddingRight: 0, paddingLeft: 0, width: 0, height: 0.5)
     }
     
-    
     func setUserStats(for user : User?){
-        var numberOfFollowers : Int!
-        var numberOfFollowing : Int!
-        
-        guard let uid = user?.uid else { return }
-        // Get number of followers by casting the snapshot as a dictionary
-        user_following.child(uid).observe(.value) { (DataSnapshot) in
-            if let following = DataSnapshot.value as? Dictionary<String , Any>{
-                numberOfFollowing = following.count
-            }else{
-                numberOfFollowing = 0
-            }
-            
-            let attributedText = NSMutableAttributedString(string: "\(numberOfFollowing!)\n", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.lightGray])
-            let postString = NSAttributedString(string: "Following", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14) ,NSAttributedString.Key.foregroundColor : UIColor.black ])
-            attributedText.append(postString)
-            self.followingLabel.attributedText = attributedText
-        }
-        
-        //Get number of following
-        user_followers.child(uid).observe(.value) { (DataSnapshot) in
-            if let followers = DataSnapshot.value as? Dictionary<String, Any> {
-                numberOfFollowers = followers.count
-            }else {
-                numberOfFollowers = 0
-            }
-
-            let attributedText = NSMutableAttributedString(string: "\(numberOfFollowers!)\n", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.lightGray])
-            let postString = NSAttributedString(string: "Followers", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14) ,NSAttributedString.Key.foregroundColor : UIColor.black ])
-            attributedText.append(postString)
-            self.followersLabel.attributedText = attributedText
-        }
-        
-        //Get number of Posts
-        
+        delegate?.setUserStats(for: self)
     }
     
-    
-    
-    //  MARK : - Handlers
     @objc func handleEditButtonTapped(){
-        print("button Tapped")
-        if self.editProfileFollowButton.titleLabel?.text == "Edit Profile"{
-            print("Handle edit user Profile")
-            
-        }else {
-            if self.editProfileFollowButton.titleLabel?.text == "Follow"{
-                editProfileFollowButton.setTitle("Following", for: .normal)
-                user?.follow()
-            }else{
-                editProfileFollowButton.setTitle("Follow", for: .normal)
-                user?.unfollow()
-            }
-        }
+        delegate?.handleEditButtonTapped(for: self)
     }
     
     
-    @objc func handleBookmark(_sender : UIButton){
-        delegate?.buttonTapped(for: self)
+    
+    // MARK: - Handlers
+    @objc func handleFollowersTapped(){
+        print("Handle followers tapped")
+        
+    }
+    @objc func handleFollowingTapped (){
+        print("Handle following tapped")
     }
     
 }

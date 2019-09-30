@@ -61,7 +61,7 @@ class User {
     func checkIfUserIsFollowed(completion : @escaping(Bool) -> ()){
         guard let currentUid = currentUser?.uid else { return }
         
-        user_following.child(currentUid).observe(.value) { (DataSnapshot) in
+        user_following.child(currentUid).observeSingleEvent(of: .value) { (DataSnapshot) in
             if DataSnapshot.hasChild(self.uid) {
                 self.isFollowed = true
                completion(true)

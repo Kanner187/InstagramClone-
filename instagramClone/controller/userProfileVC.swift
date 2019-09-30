@@ -13,13 +13,17 @@ private let reuseIdentifier = "Cell"
 private let headerIdentifier = "profileHeader"
 
 
-//inherit from the collectionviewdelegateflowlayout super class to set the size of the registered cell
+//Inherit from the collectionviewdelegateflowlayout super class to set the size of the registered header cell
 class userProfileVC: UICollectionViewController , UICollectionViewDelegateFlowLayout , userProfileHeaderDelegate{
 
-    var user : User?
     
+ 
+    //MARK: - PROPERTIES
+    var user : User?
     var userPassedFromSearch : User?
-
+    
+    
+    //MARK: - INITIALIZATION
     override func viewDidLoad() {
         super.viewDidLoad()
         self.collectionView.backgroundColor = .white
@@ -29,20 +33,19 @@ class userProfileVC: UICollectionViewController , UICollectionViewDelegateFlowLa
             fetchCurrentUserData()
         }
         
-        
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
-        //Register the collection view cell
         self.collectionView!.register(profileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
     }
 
+    
 
+    //MARK: - DELEGATE FUNCTIONS
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
@@ -52,19 +55,19 @@ class userProfileVC: UICollectionViewController , UICollectionViewDelegateFlowLa
     
     
     
-    //implement the size function. Just start typing "reference"
+    //MARK: -HEADER CONFIGURATION
+    
+    //Implement the size function. Just start typing "reference"
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 230)
     }
     
     
-    
-    //start typing supplementary
+    //Configure supplementary header cell
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        //declare Header
+
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! profileHeader
-        header.delegate = self       // Set the header cell to comform to the userProfileDelegate
+        header.delegate = self       //Set header delegate
 
         //Set user value of the header
         if let user = self.user {
@@ -77,28 +80,95 @@ class userProfileVC: UICollectionViewController , UICollectionViewDelegateFlowLa
     }
     
 
-    
-
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) 
         return cell
     }
     
     
+
     
+    //MARK: - USERPROFILEHEADER PROTOCOL
     
-    
-    
-    
-    //MARK : - HANDLERS
-    @objc func buttonTapped(for header: profileHeader) {
-        print("users are the most important elements in the growth of this world!")
- 
+    func configureEditFollowButton(for header: profileHeader) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let user = header.user else {return}
+        
+        if uid == user.uid {
+            //configure editFollowButton as edit button
+            header.editProfileFollowButton.setTitle("Edit Profile", for: .normal)
+        }else {
+            user.checkIfUserIsFollowed { (followed) in
+                if followed{
+                    header.editProfileFollowButton.setTitle("Following", for: .normal)
+                }else{
+                    header.editProfileFollowButton.setTitle("Follow", for: .normal)
+                }
+                
+                //configure edit button as follow button
+                header.editProfileFollowButton.backgroundColor = UIColor(displayP3Red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+                header.editProfileFollowButton.setTitleColor(.white, for: .normal)
+            }
+        }
     }
     
     
     
+    func setUserStats(for header: profileHeader) {
+        var numberOfFollowers : Int!
+        var numberOfFollowing : Int!
+        
+        guard let uid = header.user?.uid else { return }
+        // Get number of followers by casting the snapshot as a dictionary
+        user_following.child(uid).observe(.value) { (DataSnapshot) in
+            if let following = DataSnapshot.value as? Dictionary<String , Any>{
+                numberOfFollowing = following.count
+            }else{
+                numberOfFollowing = 0
+            }
+            
+            let attributedText = NSMutableAttributedString(string: "\(numberOfFollowing!)\n", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+            let postString = NSAttributedString(string: "Following", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14) ,NSAttributedString.Key.foregroundColor : UIColor.black ])
+            attributedText.append(postString)
+            header.followingLabel.attributedText = attributedText
+        }
+        
+        //Get number of following
+        user_followers.child(uid).observe(.value) { (DataSnapshot) in
+            if let followers = DataSnapshot.value as? Dictionary<String, Any> {
+                numberOfFollowers = followers.count
+            }else {
+                numberOfFollowers = 0
+            }
+            
+            let attributedText = NSMutableAttributedString(string: "\(numberOfFollowers!)\n", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+            let postString = NSAttributedString(string: "Followers", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14) ,NSAttributedString.Key.foregroundColor : UIColor.black ])
+            attributedText.append(postString)
+            header.followersLabel.attributedText = attributedText
+        }
+        
+        //Get number of Posts
+    }
     
+    
+    
+    //MARK: - HANDLERS
+    func handleEditButtonTapped(for header: profileHeader) {
+        if header.editProfileFollowButton.titleLabel?.text == "Edit Profile"{
+            print("Handle edit user Profile")
+            
+        }else {
+            if header.editProfileFollowButton.titleLabel?.text == "Follow"{
+               header.user?.follow()
+                header.editProfileFollowButton.setTitle("Following", for: .normal)
+                
+            }else{
+                header.user?.unfollow()
+                header.editProfileFollowButton.setTitle("Follow", for: .normal)
+                
+            }
+        }
+    }
     
     
     

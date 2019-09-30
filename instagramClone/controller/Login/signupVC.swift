@@ -11,7 +11,7 @@ import Firebase
 
 class signupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    var userSelectedAnImage : Bool = false          // Tracks when a user selects an image as a profile picture.
+    var userSelectedAnImage : Bool = false          //Tracks when a user selects an image as a profile picture.
 
     //  MARK : - VIEWS
     let photoButton : UIButton = {
@@ -29,7 +29,7 @@ class signupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         emailField.backgroundColor = UIColor (white: 0, alpha: 0.03)
         emailField.autocorrectionType = UITextAutocorrectionType.no
         emailField.autocapitalizationType = UITextAutocapitalizationType.none
-        emailField.addTarget(self , action: #selector(formValidation), for: .editingChanged) // This adds a target function to the text field
+        emailField.addTarget(self , action: #selector(formValidation), for: .editingChanged)   //This adds a target function to the text field
         return emailField
     }()
     
@@ -97,7 +97,7 @@ class signupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         photoButton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 60, paddingBottom: 0, paddingRight: 40, paddingLeft: 0, width: 140, height: 140)
         photoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true // Positions the photobutton at the center of the X axis.
         
-        configureViews()       // This adds the stack view to the view controller
+        configureViews()       //Adds the stack view to the view controller
         
         view.addSubview(alreadyHaveAccount)
         alreadyHaveAccount.anchor(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingBottom: 20, paddingRight: 30, paddingLeft: 20, width: 0, height: 40)
@@ -129,7 +129,7 @@ class signupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.allowsEditing = true  // This enable the editing of a picture by the image picker delegate
+        imagePicker.allowsEditing = true  // Enable the editing of a picture by the image picker delegate
         
         if UIImagePickerController.isSourceTypeAvailable(.camera){
             let cameraAction = UIAlertAction(title: "Camera", style: .default) { (action) in
@@ -153,13 +153,13 @@ class signupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         //Casts the selected image as a UIImage
         guard let selectedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
-            userSelectedAnImage = false    // This is performed when a user doesn't select an image for a profile picture.
+            userSelectedAnImage = false    //Performed when a user doesn't select an image for a profile picture.
             return
         }
-        userSelectedAnImage = true // This is set after the user selects an image as a profile picture
+        userSelectedAnImage = true  //Sets after the user selects an image as a profile picture
         
         //Configure photobutton with selected image
-        photoButton.layer.cornerRadius = photoButton.frame.width/2 // This gives the button a circular shape
+        photoButton.layer.cornerRadius = photoButton.frame.width/2   //Gives the button a circular shape
         photoButton.layer.masksToBounds = true
         photoButton.layer.borderColor = UIColor.black.cgColor
         photoButton.layer.borderWidth = 1
@@ -202,7 +202,7 @@ class signupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             }
  
             //Working on profile picture
-            guard let profileImage = self.photoButton.imageView?.image else {return}                    // Grab the image to be stored
+            guard let profileImage = self.photoButton.imageView?.image else {return}                    //Grabs the image to be stored
             guard let compressedImage = profileImage.jpegData(compressionQuality: 0.5) else {return}   //Compress Image to able fast download.
             
             let filename = UUID().uuidString         //creates a unique identifier for each data to be uploaded into storage
@@ -233,10 +233,10 @@ class signupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
                     let userDictionary : [String : Any] = ["fullname" : fullName, "username" : username , "profileImageURL" : profileImageUrl]
                     
                     let uniqueUserID = user?.user.uid
-                    let user = [uniqueUserID : userDictionary] // Assigns a user dictionary to a unique identifier.
+                    let user = [uniqueUserID : userDictionary]    //Assigns a user dictionary to a unique identifier.
                     
 
-                    //Save user info to database
+                    //Saves user info to database
                     Database.database().reference().child("users").updateChildValues(user, withCompletionBlock: { (error, ref) in
                         //Handling error
                         if let error = error {
