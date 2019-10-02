@@ -10,13 +10,15 @@ import Foundation
 import Firebase
 
 class User {
-    //Properties
+    //Mark: - Properties
     var username : String!
     var fullname : String!
     var profileImageURL : String!
     var uid : String!
     var isFollowed : Bool = false
 
+    
+    //Mark: - Initialization 
     init (uid : String , dictionary : [String : Any]) {
         
         self.uid = uid
@@ -34,6 +36,7 @@ class User {
         }
     }
     
+    //Mark: - Methods
     
     func follow (){
         guard let currentUser = Auth.auth().currentUser?.uid else { return }

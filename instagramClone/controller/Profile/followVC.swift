@@ -12,6 +12,7 @@ import Firebase
 class followVC: UITableViewController, followerCellDelegate {
 
     // MARK: - PROPERTIES
+    var users = [User]()
     var viewFollowers = false
     var viewFollowing = false
     var uid : String? 
@@ -37,7 +38,6 @@ class followVC: UITableViewController, followerCellDelegate {
         
         //Clear separator lines
         tableView.separatorColor = .clear
-        
     }
     
     
@@ -48,7 +48,7 @@ class followVC: UITableViewController, followerCellDelegate {
         return 1
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return users.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -58,9 +58,11 @@ class followVC: UITableViewController, followerCellDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let followerCell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! FollowerCell
         followerCell.delegate = self
+        followerCell.user = users[indexPath.row]
+        
         return followerCell
     }
-    
+
     
     //MARK: - FUNCTIONS
     
@@ -69,7 +71,21 @@ class followVC: UITableViewController, followerCellDelegate {
     
     //MARK:- HANDLERS
     func handleFollowButtonTapped(for cell: FollowerCell) {
-        print("Button Tapped")
+        guard let user = cell.user else {return}
+        if user.isFollowed{
+            user.unfollow()
+            cell.button.setTitle("Follow", for: .normal)
+            cell.button.setTitleColor(.white, for: .normal)
+            cell.button.layer.borderWidth = 0
+            cell.button.backgroundColor = UIColor(displayP3Red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+        }else{
+            user.follow()
+            cell.button.setTitle("Following", for: .normal)
+            cell.button.setTitleColor(.black, for: .normal)
+            cell.button.layer.borderWidth = 0.5
+            cell.button.layer.borderColor = UIColor.lightGray.cgColor
+            cell.button.backgroundColor = UIColor.white
+        }
     }
     
     
@@ -88,7 +104,16 @@ class followVC: UITableViewController, followerCellDelegate {
         }
         
         ref.child(uid).observe(.childAdded) { (snapshot) in
-            print(snapshot)
+             let userId = snapshot.key
+        
+            usersReference.child(userId).observeSingleEvent(of: .value, with: { (snapshot) in
+                guard let dictionary = snapshot.value as? Dictionary<String , Any> else { return }
+                let user = User(uid: userId, dictionary: dictionary)
+                self.users.append(user)
+                
+                self.tableView.reloadData()
+            })
+            
         }
         
         

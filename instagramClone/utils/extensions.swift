@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 extension UIView {
     
@@ -76,5 +77,11 @@ extension UIImageView{
                 self.image = image
             }
             }.resume()  //The resume() after the urlsessions causes it to resume if it ever gets suspended.
+    }
+}
+
+extension Database {
+    func loadUsers(){
+        
     }
 }

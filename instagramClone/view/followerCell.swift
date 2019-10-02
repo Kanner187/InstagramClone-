@@ -12,6 +12,35 @@ class FollowerCell: UITableViewCell {
     var delegate : followerCellDelegate?
     var user : User? {
         didSet{
+            guard  let imageUrl = user?.profileImageURL else {return}
+            guard  let username = user?.username else {return}
+            guard let fullname = user?.fullname else {return}
+            
+            userImage.loadImage(with: imageUrl)
+            self.textLabel?.text = username
+            self.detailTextLabel?.text = fullname
+            
+            //Configure follow button title
+            user?.checkIfUserIsFollowed(completion: { (followed) in
+                if followed{
+                    self.button.setTitle("Following", for: .normal)
+                    self.button.setTitleColor(.black, for: .normal)
+                    self.button.layer.borderWidth = 0.5
+                    self.button.layer.borderColor = UIColor.lightGray.cgColor
+                    self.button.backgroundColor = UIColor.white
+                }else{
+                    self.button.setTitle("Follow", for: .normal)
+                    self.button.setTitleColor(.white, for: .normal)
+                    self.button.layer.borderWidth = 0
+                    self.button.backgroundColor = UIColor(displayP3Red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+                }
+                
+                //Show button when user is not current user
+                guard let uid = self.user?.uid else { return }
+                if uid != currentUser?.uid {
+                    self.button.isHidden = false
+                }
+            })
         }
     }
     
@@ -50,8 +79,9 @@ class FollowerCell: UITableViewCell {
         button.anchor(top: nil, left: nil, bottom: nil, right: self.rightAnchor, paddingTop: 0, paddingBottom: 0, paddingRight: 10, paddingLeft: 0, width: 90, height: 30)
         button.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         
-        textLabel?.text = "Username"
-        detailTextLabel?.text = "Fullname"
+        //Hides button
+        button.isHidden = true
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
