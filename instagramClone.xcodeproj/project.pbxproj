@@ -26,6 +26,8 @@
 		1BBBB67C233665C40015865D /* Protocols .swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBBB67B233665C40015865D /* Protocols .swift */; };
 		1BBBB67E23368EE00015865D /* constants .swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBBB67D23368EE00015865D /* constants .swift */; };
 		1BCDEA9F231E90D10029F2D1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1BCDEA9E231E90D10029F2D1 /* GoogleService-Info.plist */; };
+		1BD27ED423435D2A00358675 /* followVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD27ED323435D2A00358675 /* followVC.swift */; };
+		1BD27ED623435ED300358675 /* followerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BD27ED523435ED300358675 /* followerCell.swift */; };
 		1BF0B102232D642800B2B383 /* searchUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF0B101232D642800B2B383 /* searchUserCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +52,8 @@
 		1BBBB67B233665C40015865D /* Protocols .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Protocols .swift"; sourceTree = "<group>"; };
 		1BBBB67D23368EE00015865D /* constants .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "constants .swift"; sourceTree = "<group>"; };
 		1BCDEA9E231E90D10029F2D1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1BD27ED323435D2A00358675 /* followVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = followVC.swift; sourceTree = "<group>"; };
+		1BD27ED523435ED300358675 /* followerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = followerCell.swift; sourceTree = "<group>"; };
 		1BF0B101232D642800B2B383 /* searchUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchUserCell.swift; sourceTree = "<group>"; };
 		21B1485378C28CF015AED814 /* Pods-instagramClone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-instagramClone.release.xcconfig"; path = "Target Support Files/Pods-instagramClone/Pods-instagramClone.release.xcconfig"; sourceTree = "<group>"; };
 		4B4F45651A84512CA881645D /* Pods-instagramClone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-instagramClone.debug.xcconfig"; path = "Target Support Files/Pods-instagramClone/Pods-instagramClone.debug.xcconfig"; sourceTree = "<group>"; };
@@ -113,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				1B527C852327BB9B00B7E0EB /* userProfileVC.swift */,
+				1BD27ED323435D2A00358675 /* followVC.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -171,6 +176,7 @@
 			children = (
 				1B527C8E2329025A00B7E0EB /* profileHeader.swift */,
 				1BF0B101232D642800B2B383 /* searchUserCell.swift */,
+				1BD27ED523435ED300358675 /* followerCell.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -331,6 +337,7 @@
 				1B527C842327BB3800B7E0EB /* notificationVC.swift in Sources */,
 				1B527C822327BAEC00B7E0EB /* uploadPostVC.swift in Sources */,
 				1B527C862327BB9B00B7E0EB /* userProfileVC.swift in Sources */,
+				1BD27ED423435D2A00358675 /* followVC.swift in Sources */,
 				1BBBB67E23368EE00015865D /* constants .swift in Sources */,
 				1B527C7E2327BA6400B7E0EB /* feedVC.swift in Sources */,
 				1B527C8F2329025A00B7E0EB /* profileHeader.swift in Sources */,
@@ -339,6 +346,7 @@
 				1BB89FEA231D211E000FA319 /* loginVC.swift in Sources */,
 				1B969D3B232BA5A100C6ABEE /* User.swift in Sources */,
 				1B527C7C2327B13600B7E0EB /* mainVC.swift in Sources */,
+				1BD27ED623435ED300358675 /* followerCell.swift in Sources */,
 				1BB89FD3231D202A000FA319 /* AppDelegate.swift in Sources */,
 				1BB89FED231D2A5B000FA319 /* extensions.swift in Sources */,
 			);

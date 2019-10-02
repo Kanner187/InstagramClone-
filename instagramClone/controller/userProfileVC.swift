@@ -15,12 +15,9 @@ private let headerIdentifier = "profileHeader"
 
 //Inherit from the collectionviewdelegateflowlayout super class to set the size of the registered header cell
 class userProfileVC: UICollectionViewController , UICollectionViewDelegateFlowLayout , userProfileHeaderDelegate{
-
-    
  
     //MARK: - PROPERTIES
     var user : User?
-    var userPassedFromSearch : User?
     
     
     //MARK: - INITIALIZATION
@@ -29,7 +26,7 @@ class userProfileVC: UICollectionViewController , UICollectionViewDelegateFlowLa
         self.collectionView.backgroundColor = .white
         
         //fetch user data
-        if userPassedFromSearch == nil {
+        if self.user == nil {
             fetchCurrentUserData()
         }
         
@@ -70,12 +67,9 @@ class userProfileVC: UICollectionViewController , UICollectionViewDelegateFlowLa
         header.delegate = self       //Set header delegate
 
         //Set user value of the header
-        if let user = self.user {
-           header.user = user
-        }else if let userFromSearch = userPassedFromSearch {
-            header.user = userFromSearch
-            navigationItem.title = userFromSearch.username
-        }
+        header.user = self.user
+        navigationItem.title = user?.username
+
         return header
     }
     
@@ -170,13 +164,28 @@ class userProfileVC: UICollectionViewController , UICollectionViewDelegateFlowLa
         }
     }
     
+    func handleFollowersTapped(for header: profileHeader) {
+        let followersVC = followVC()
+        followersVC.viewFollowers = true
+        followersVC.uid = user?.uid
+        navigationController?.pushViewController(followersVC, animated: true)
+    }
     
+    func handleFollowingTapped(for header: profileHeader) {
+        let followingVC = followVC()
+        followingVC.viewFollowing = true
+        followingVC.uid = user?.uid
+        navigationController?.pushViewController(followingVC, animated: true)
+    }
+    
+    
+
     
     //MARK: - API
     func fetchCurrentUserData(){
         //To get data on the current user, first get the user's uid
         guard let currentUserUid = Auth.auth().currentUser?.uid else {return}
-        let userData = Database.database().reference().child("users").child(currentUserUid)
+        let userData = usersReference.child(currentUserUid)
         
         userData.observeSingleEvent(of: .value) { (DataSnapshot) in
             guard let dictionary = DataSnapshot.value as? Dictionary <String , Any> else {return}

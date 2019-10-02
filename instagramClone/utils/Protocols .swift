@@ -13,5 +13,10 @@ protocol userProfileHeaderDelegate {
     func configureEditFollowButton (for header: profileHeader)
     func setUserStats (for header : profileHeader)
     func handleEditButtonTapped (for header : profileHeader)
-    
+    func handleFollowersTapped (for header : profileHeader)
+    func handleFollowingTapped (for header : profileHeader)
+}
+
+protocol followerCellDelegate {
+    func handleFollowButtonTapped(for cell : FollowerCell)
 }

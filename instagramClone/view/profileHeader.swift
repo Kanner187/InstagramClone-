@@ -64,8 +64,14 @@ class profileHeader: UICollectionViewCell {
         let fl = UILabel()
         fl.numberOfLines = 0
         fl.textAlignment = .center
+        
+        let attributedText = NSMutableAttributedString(string: "\n", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        let postString = NSAttributedString(string: "Followers", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14) ,NSAttributedString.Key.foregroundColor : UIColor.black ])
+        attributedText.append(postString)
+        fl.attributedText = attributedText
         //Add tap gesture recognizer
-        let followersTap = UIGestureRecognizer(target: self, action: #selector(handleFollowersTapped))
+        let followersTap = UITapGestureRecognizer(target: self , action: #selector(handleFollowersTapped))
+        followersTap.numberOfTapsRequired = 1
         fl.isUserInteractionEnabled = true
         fl.addGestureRecognizer(followersTap)
         return fl
@@ -75,7 +81,16 @@ class profileHeader: UICollectionViewCell {
         let fl = UILabel()
         fl.numberOfLines = 0
         fl.textAlignment = .center
-        let tapRecognizer = UIGestureRecognizer(target: self , action: #selector(handleFollowingTapped))
+        //Add attributed Text
+        let attributedText = NSMutableAttributedString(string: "\n", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        let postString = NSAttributedString(string: "Following", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14) ,NSAttributedString.Key.foregroundColor : UIColor.black ])
+        attributedText.append(postString)
+        fl.attributedText = attributedText
+        //Add tapRecognizer
+        let tapRecognizer = UITapGestureRecognizer(target: self , action: #selector(handleFollowingTapped))
+        tapRecognizer.numberOfTapsRequired = 1
+        fl.isUserInteractionEnabled = true
+        fl.addGestureRecognizer(tapRecognizer)
         return fl
     }()
 
@@ -93,7 +108,7 @@ class profileHeader: UICollectionViewCell {
         return listButton
     }()
     
-   lazy var  bookmarkButton : UIButton = {
+   lazy var bookmarkButton : UIButton = {
         let bookmarkButton = UIButton(type: .system)
         bookmarkButton.setImage(#imageLiteral(resourceName: "ribbon"), for: .normal)
         bookmarkButton.tintColor = UIColor.lightGray
@@ -108,6 +123,7 @@ class profileHeader: UICollectionViewCell {
         editButton.tintColor = UIColor.black
         editButton.layer.cornerRadius = 5
         editButton.addTarget(self , action: #selector(handleEditButtonTapped), for: .touchUpInside)
+        editButton.setTitle("Loading", for: .normal)
         return editButton
     }()
     
@@ -189,11 +205,11 @@ class profileHeader: UICollectionViewCell {
     
     // MARK: - Handlers
     @objc func handleFollowersTapped(){
-        print("Handle followers tapped")
+        delegate?.handleFollowersTapped(for: self)
         
     }
     @objc func handleFollowingTapped (){
-        print("Handle following tapped")
+        delegate?.handleFollowingTapped(for: self)
     }
     
 }

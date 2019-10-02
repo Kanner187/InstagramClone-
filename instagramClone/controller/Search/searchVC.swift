@@ -22,8 +22,11 @@ class searchVC: UITableViewController {
         //Register subclasses
         self.tableView!.register(searchUserCell.self, forCellReuseIdentifier: searchIdentifier)
         
-        //Separator insets. cleans the lines that separate the cells
-        tableView.separatorInset = UIEdgeInsets(top: 0, left: 500, bottom: 0, right: 0)
+//        //Separator inset clears part of separator lines
+//        tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
+        
+        //Clears separator lines
+        tableView.separatorColor = .clear
         
         //fetch users
         fetchUsers()
@@ -61,12 +64,10 @@ class searchVC: UITableViewController {
         
         // Create instance of user profile Vc
         let userVC = userProfileVC(collectionViewLayout: UICollectionViewFlowLayout())
-        
-        // push view controller
         navigationController?.pushViewController(userVC, animated: true)
         
         //Passes user from searchVC to user profile
-        userVC.userPassedFromSearch = user
+        userVC.user = user
     }
     
     

@@ -41,16 +41,12 @@ class searchUserCell: UITableViewCell {
         profileImageView.anchor(top: nil, left: self.leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingBottom: 0, paddingRight: 0, paddingLeft: 5, width: 48, height: 48)
         profileImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         profileImageView.layer.cornerRadius = 48 / 2
-        profileImageView.clipsToBounds = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
-    //Mark : Handlers
     
     override func layoutSubviews() {
         super.layoutSubviews()
