@@ -79,8 +79,11 @@ class FollowerCell: UITableViewCell {
         button.anchor(top: nil, left: nil, bottom: nil, right: self.rightAnchor, paddingTop: 0, paddingBottom: 0, paddingRight: 10, paddingLeft: 0, width: 90, height: 30)
         button.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         
-        //Hides button
+        //Hide Follow button
         button.isHidden = true
+        
+        //Disable the gray color of cell when selected
+        self.selectionStyle = .none
         
     }
     

@@ -81,7 +81,20 @@ extension UIImageView{
 }
 
 extension Database {
-    func loadUsers(){
+    static func fetchUser(with uid : String , completion : @escaping(User)-> ()){
         
+        usersReference.child(uid).observeSingleEvent(of: .value) { (snapshot) in
+            guard let dictionary = snapshot.value as? Dictionary<String , Any>  else { return }
+            let user = User(uid: uid, dictionary: dictionary)
+            completion(user)
+        }
+    }
+}
+
+extension Database{
+    static func fetchFollowers (with uid : String , completion : @escaping(User)-> ()){
+        user_followers.child(uid).observeSingleEvent(of: .value) { (snapshot) in
+            //To be continued
+        }
     }
 }

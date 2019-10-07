@@ -84,19 +84,12 @@ class searchVC: UITableViewController {
     //Mark : API
     func fetchUsers(){
         Database.database().reference().child("users").observe(.childAdded) { (snapshot) in
-            
             let uid = snapshot.key
-            //Cast snapshot as dictionary 
-            guard let dictionary = snapshot.value as? Dictionary<String,Any> else {return}
-            
-            let user = User(uid: uid, dictionary: dictionary)
-            
-            //Append user to data source
-            self.users.append(user)
-            
-            //Reload table View
-            self.tableView.reloadData()
-            
+            Database.fetchUser(with: uid, completion: { (user) in
+                //Append user to data source
+                self.users.append(user)
+                self.tableView.reloadData()
+            })
         }
     }
 }

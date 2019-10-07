@@ -38,6 +38,7 @@ class followVC: UITableViewController, followerCellDelegate {
         
         //Clear separator lines
         tableView.separatorColor = .clear
+        
     }
     
     
@@ -62,6 +63,13 @@ class followVC: UITableViewController, followerCellDelegate {
         
         return followerCell
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = users[indexPath.row]
+        let userProfile = userProfileVC(collectionViewLayout: UICollectionViewFlowLayout())
+        userProfile.user = user
+        navigationController?.pushViewController(userProfile, animated: true)
+    }
 
     
     //MARK: - FUNCTIONS
@@ -78,6 +86,7 @@ class followVC: UITableViewController, followerCellDelegate {
             cell.button.setTitleColor(.white, for: .normal)
             cell.button.layer.borderWidth = 0
             cell.button.backgroundColor = UIColor(displayP3Red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+            
         }else{
             user.follow()
             cell.button.setTitle("Following", for: .normal)
@@ -86,6 +95,7 @@ class followVC: UITableViewController, followerCellDelegate {
             cell.button.layer.borderColor = UIColor.lightGray.cgColor
             cell.button.backgroundColor = UIColor.white
         }
+        
     }
     
     
@@ -103,15 +113,16 @@ class followVC: UITableViewController, followerCellDelegate {
             ref = user_following
         }
         
-        ref.child(uid).observe(.childAdded) { (snapshot) in
-             let userId = snapshot.key
-        
-            usersReference.child(userId).observeSingleEvent(of: .value, with: { (snapshot) in
-                guard let dictionary = snapshot.value as? Dictionary<String , Any> else { return }
-                let user = User(uid: userId, dictionary: dictionary)
-                self.users.append(user)
-                
-                self.tableView.reloadData()
+        ref.child(uid).observeSingleEvent(of:.value) { (snapshot) in
+
+            guard let allObjects = snapshot.children.allObjects as? [DataSnapshot] else {return}
+            allObjects.forEach({ (snapshot) in
+                let userId = snapshot.key
+    
+                Database.fetchUser(with: userId, completion: { (user) in
+                    self.users.append(user)
+                    self.tableView.reloadData()
+                })
             })
             
         }

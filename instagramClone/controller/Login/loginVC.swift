@@ -109,9 +109,6 @@ class loginVC: UIViewController {
     }
     
     
-    
-    
-    
     //Button activation function
     @objc func buttonActivation(){
         guard emailTextField.hasText , passwordTextfield.hasText else {
@@ -122,9 +119,6 @@ class loginVC: UIViewController {
         loginButton.isEnabled = true
         loginButton.backgroundColor = UIColor(red: 0/255, green: 120/255, blue: 175/255, alpha: 1)
     }
-    
-    
-    
     
     
     
@@ -151,9 +145,6 @@ class loginVC: UIViewController {
         }
     }
     
-    
-    
-
 
     //Navigation to sign up page
     @objc func handleSignUp(){
