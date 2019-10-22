@@ -33,3 +33,6 @@ let user_followers = DatabaseReference.child("user_followers")
 
 //Storage References
 let profile_image_ref = StorageReference.child("profileImages")
+
+//Post reference
+let postReference = DatabaseReference.child("posts")
