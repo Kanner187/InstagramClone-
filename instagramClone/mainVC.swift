@@ -56,6 +56,7 @@ class mainVC: UITabBarController, UITabBarControllerDelegate {
         if index == 2 {
             let selectImageVC = SelectImageVC(collectionViewLayout: UICollectionViewFlowLayout())
             let navController = UINavigationController(rootViewController: selectImageVC)
+            navController.navigationBar.tintColor = .black
             self.present(navController, animated: true, completion: nil)
             return false
         }

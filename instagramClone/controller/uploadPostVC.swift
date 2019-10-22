@@ -10,20 +10,28 @@ import UIKit
 
 class uploadPostVC: UIViewController , UploadImageDelegate{
 
-    
+
     //Mark: Properties
-    lazy var PhotoSelected : UIImageView = {
-          let imageView = UIImageView()
-          imageView.contentMode = .scaleAspectFill
-          imageView.clipsToBounds = true
-          imageView.backgroundColor = .lightGray
-          return imageView
-      }()
+    
+    var SelectedImage : UIImage?{
+        didSet{
+            PhotoSelected.image = self.SelectedImage
+        }
+    }
+    
+   let PhotoSelected : UIImageView = {
+    let imageView = UIImageView()
+    imageView.contentMode = .scaleAspectFill
+    imageView.clipsToBounds = true
+    imageView.backgroundColor = .lightGray
+    return imageView
+   }()
     
     let captionField : UITextView = {
         let caption = UITextView()
         caption.backgroundColor = UIColor.groupTableViewBackground
         caption.font = UIFont.systemFont(ofSize: 14 )
+        caption.textColor = UIColor.black 
         return caption
     }()
     
@@ -46,13 +54,14 @@ class uploadPostVC: UIViewController , UploadImageDelegate{
         view.backgroundColor = .white
         
         view.addSubview(PhotoSelected)
-        PhotoSelected.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: nil, paddingTop: 5, paddingBottom: 0, paddingRight: 0, paddingLeft: 5, width: 100, height: 100)
+        PhotoSelected.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: nil, paddingTop: 82, paddingBottom: 0, paddingRight: 0, paddingLeft: 5, width: 100, height: 100)
         
         view.addSubview(captionField)
-        captionField.anchor(top: view.topAnchor, left: PhotoSelected.rightAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 5, paddingBottom: 0, paddingRight: 5, paddingLeft: 5, width: 0, height: 100)
+        captionField.anchor(top: view.topAnchor, left: PhotoSelected.rightAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 82, paddingBottom: 0, paddingRight: 5, paddingLeft: 5, width: 0, height: 100)
         
         view.addSubview(uploadButton)
         uploadButton.anchor(top: captionField.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 20, paddingBottom: 0, paddingRight: 10, paddingLeft: 10, width: 0, height: 40 )
+        configureNavBar()
     }
     
     

@@ -13,7 +13,7 @@ class SelectPhotoHeader : UICollectionViewCell {
     //Mark: - Properties
     let PhotoImage : UIImageView = {
         let pi = UIImageView()
-        pi.backgroundColor = .blue
+        pi.backgroundColor = .white
         pi.contentMode = .scaleAspectFill
         pi.clipsToBounds = true
         return pi
