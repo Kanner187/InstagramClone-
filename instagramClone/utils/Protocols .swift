@@ -19,3 +19,12 @@ protocol userProfileHeaderDelegate {
 protocol followerCellDelegate {
     func handleFollowButtonTapped(for cell : FollowerCell)
 }
+
+protocol SelectImageDelegate {
+    func handleCancel()
+    func handleNext()
+}
+
+protocol  UploadImageDelegate {
+    func handleUpload()
+}

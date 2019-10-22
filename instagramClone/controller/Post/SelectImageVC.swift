@@ -8,7 +8,8 @@
 
 import UIKit
 
-class SelectImageVC : UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class SelectImageVC : UICollectionViewController, UICollectionViewDelegateFlowLayout , SelectImageDelegate {
+  
     //Mark: - Properties
     private let reusableIdentifier = "cell"
     private let headerIdentifier = "header"
@@ -16,12 +17,15 @@ class SelectImageVC : UICollectionViewController, UICollectionViewDelegateFlowLa
     //Mark: - Initialization
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        collectionView.backgroundColor = .white
-        
+ 
         //register collection view cell
         self.collectionView.register(SelectPhotoCell.self, forCellWithReuseIdentifier: reusableIdentifier)
         self.collectionView.register(SelectPhotoHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
+        
+        collectionView.backgroundColor = .white
+        
+        //Configure Navigation buttons
+        configureNavigationButtons()
     }
     
     
@@ -77,5 +81,21 @@ class SelectImageVC : UICollectionViewController, UICollectionViewDelegateFlowLa
         return header
     }
     
+    //Mark: - Delegate 
+    @objc func handleCancel() {
+        self.dismiss(animated: true, completion: nil )
+      }
+    @objc func handleNext() {
+        let uploadImageController = uploadPostVC()
+        navigationController?.pushViewController(uploadImageController, animated: true)
+    }
+    
+    //Mark: - Handlers
+    func configureNavigationButtons ( ){
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.leftBarButtonItem?.tintColor = .red
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(handleNext))
+        navigationItem.rightBarButtonItem?.tintColor = .black
+    }
      
 }

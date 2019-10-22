@@ -51,7 +51,7 @@ class profileHeader: UICollectionViewCell {
         let pl = UILabel()
         pl.numberOfLines = 0       //Allows multiple lines of text
         //Declare two instances of an attributed text with font and color properties and appends them
-        let attributedText = NSMutableAttributedString(string: "4\n", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        let attributedText = NSMutableAttributedString(string: "\n", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         let postString = NSAttributedString(string: "Posts", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14) ,NSAttributedString.Key.foregroundColor : UIColor.black ])
         
         attributedText.append(postString)
