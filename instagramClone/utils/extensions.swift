@@ -91,10 +91,3 @@ extension Database {
     }
 }
 
-extension Database{
-    static func fetchFollowers (with uid : String , completion : @escaping(User)-> ()){
-        user_followers.child(uid).observeSingleEvent(of: .value) { (snapshot) in
-            //To be continued
-        }
-    }
-}

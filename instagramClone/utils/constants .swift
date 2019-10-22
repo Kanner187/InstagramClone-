@@ -8,6 +8,12 @@
 
 import Foundation
 import Firebase
+/*
+ CREDENTIALS TO LOGIN WITH
+ Email : danieltetteh@gmail.com
+ Password : llllllll
+ */
+
 
 //Root references
 let DatabaseReference = Database.database().reference()
